@@ -1,5 +1,5 @@
 <?php
-if ( $_POST['payload'] || $_GET["override"] ) {
+if ( isset($_POST['payload']) || $_GET["override"] ) {
     echo "Running <code>git reset --hard HEAD && git pull<code>. Output:<br><pre>\n";
     echo shell_exec( 'git reset --hard HEAD && git pull' );
     echo "</pre>";
