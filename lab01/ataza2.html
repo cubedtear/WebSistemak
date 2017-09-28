@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kalkulagailua - Elena Hernandez eta Aritz Lopez</title>
+    <style>
+        .shake {
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        .wrong {
+            background-color: #ff8986;
+        }
+
+        .right {
+            background-color: #90ff7e;
+        }
+
+        input, select, span, button {
+            font-size: 24pt;
+        }
+
+        input {
+            width: 200px;
+        }
+
+        button, select {
+            /*border: none;*/
+            background-color: #a8a8a8;
+        }
+
+        button:hover, select:hover {
+            background-color: lightgray;
+        }
+
+        body {
+            text-align: center;
+            background-color: teal;
+        }
+
+        form {
+            margin: auto;
+        }
+
+        @keyframes shake {
+            10%, 90% {
+                transform: translate3d(-10px, 0, 0);
+            }
+
+            20%, 80% {
+                transform: translate3d(20px, 0, 0);
+            }
+
+            30%, 50%, 70% {
+                transform: translate3d(-30px, 0, 0);
+            }
+
+            40%, 60% {
+                transform: translate3d(30px, 0, 0);
+            }
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" async defer></script>
+    <script>
+        function iscorrect(){
+            var v1 = $("#value1");
+            var v2 = $("#value2");
+            var v3 = $("#result");
+
+            var n1 = parseInt(v1.val());
+            var n2 = parseInt(v2.val());
+            var n3 = parseInt(v3.val());
+
+            var error = false;
+            if (isNaN(n1)) {
+                error = true;
+                v1.addClass("wrong");
+            } else {
+                v1.removeClass("wrong");
+            }
+
+            if (isNaN(n2)) {
+                error = true;
+                v2.addClass("wrong");
+            } else {
+                v2.removeClass("wrong");
+            }
+
+            if (isNaN(n3)) {
+                error = true;
+                v3.addClass("wrong");
+            } else {
+                v3.removeClass("wrong");
+            }
+            if (error) return;
+
+            var op = $("#action").val();
+            var expected;
+            switch (op) {
+                case '+':
+                    expected = n1 + n2;
+                    break;
+                case '-':
+                    expected = n1 - n2;
+                    break;
+                case '*':
+                    expected = n1 * n2;
+                    break;
+                case '/':
+                    expected = n1 / n2;
+                    break;
+            }
+            if (expected === n3) {
+                v3.addClass("right");
+                v3.removeClass("wrong");
+
+            } else {
+                v3.addClass("wrong");
+                v3.removeClass("right");
+                v3.addClass("shake");
+                setTimeout(function () {
+                    v3.removeClass("shake");
+                }, 1000);
+            }
+        }
+
+    </script>
+    </head>
+<body>
+<h1>Let's calculate!</h1>
+<input type="number" id="value1">
+<select id="action">
+    <option value="+">+</option>
+    <option value="-">-</option>
+    <option value="*">*</option>
+    <option value="/">/</option>
+</select>
+<input type="number" id="value2">
+<h1 style="display: inline">=</h1>
+<input type="number" id="result">
+<input type="submit" onclick="iscorrect()" value="Send">
+
+</body>
+</html>
