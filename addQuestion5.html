@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html;" http-equiv="content-type" charset="utf-8">
+    <title>Quizzes</title>
+
+    <script language="JavaScript" src="js/jquery-3.2.1.min.js" defer></script>
+    <script language="JavaScript" src="js/materialize.min.js" defer></script>
+    <script language="JavaScript" src="js/quiz5.js" defer></script>
+
+    <link rel='stylesheet' type='text/css' href='css/materialize.min.css'/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="shortcut icon" href="/img/icons/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/img/icons/apple-touch-icon-57x57.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/img/icons/apple-touch-icon-114x114.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/img/icons/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/icons/apple-touch-icon-144x144.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/img/icons/apple-touch-icon-60x60.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/img/icons/apple-touch-icon-120x120.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/img/icons/apple-touch-icon-76x76.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/img/icons/apple-touch-icon-152x152.png"/>
+    <link rel="icon" type="image/png" href="/img/icons/favicon-196x196.png" sizes="196x196"/>
+    <link rel="icon" type="image/png" href="/img/icons/favicon-96x96.png" sizes="96x96"/>
+    <link rel="icon" type="image/png" href="/img/icons/favicon-32x32.png" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="/img/icons/favicon-16x16.png" sizes="16x16"/>
+    <link rel="icon" type="image/png" href="/img/icons/favicon-128.png" sizes="128x128"/>
+    <meta name="msapplication-TileImage" content="/img/icons/mstile-144x144.png"/>
+    <meta name="msapplication-square70x70logo" content="/img/icons/mstile-70x70.png"/>
+    <meta name="msapplication-square150x150logo" content="/img/icons/mstile-150x150.png"/>
+    <meta name="msapplication-wide310x150logo" content="/img/icons/mstile-310x150.png"/>
+    <meta name="msapplication-square310x310logo" content="/img/icons/mstile-310x310.png"/>
+
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        .input-field label {
+            width: 100%;
+        }
+
+        .input-field label:after {
+            padding-top: 4px;
+        }
+    </style>
+</head>
+<body>
+<header class='main' id='h1'>
+    <ul id="dropdown1" class="dropdown-content">
+        <li><a href="/addQuestion.html">HTML4 + jQuery</a></li>
+        <li><a href="/addQuestion5.html">HTML5</a></li>
+    </ul>
+    <nav>
+        <div class="nav-wrapper" style="padding-left: 32px">
+            <a href="/layout.html" class="brand-logo">Quizzes</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/layout.html">Home</a></li>
+                <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Quizzes<i class="material-icons right">arrow_drop_down</i></a></li>
+                <li><a href="credits.html">Credits</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 center-align">
+                <h2>Add a quiz!</h2>
+            </div>
+            <form class="col s6 push-s3" action="proba.php" id="galderenF" name="galderenF" method="post">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="email" placeholder="xxxxx123@ikasle.ehu.es" id="email" type="email" class="validate" required pattern="[a-zA-Z]+[0-9]{3}@ikasle\.ehu\.eu?s">
+                        <label for="email" data-error="Wrong email">Email *</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="galdera" name="galdera" class="materialize-textarea validate" required minlength="10"></textarea>
+                        <label for="galdera" data-error="At least 10 characters">Question *</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="erantzun_zuzena" id="erantzun_zuzena" type="text" class="validate" required>
+                        <label for="erantzun_zuzena" data-error="This field is required!">Correct answer *</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="erantzun_okerra1" id="erantzun_okerra1" type="text" class="validate" required>
+                        <label for="erantzun_okerra1" data-error="This field is required!">Wrong answer 1 *</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="erantzun_okerra2" id="erantzun_okerra2" type="text" class="validate" required>
+                        <label for="erantzun_okerra2" data-error="This field is required!">Wrong answer 2 *</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="erantzun_okerra3" id="erantzun_okerra3" type="text" class="validate" required>
+                        <label for="erantzun_okerra3" data-error="This field is required!">Wrong answer 3 *</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="number" name="zailtasuna" id="zailtasuna" class="validate" min="1" max="5" step="1" required value="3">
+                        <label for="zailtasuna" data-error="Must be a number between 1 and 5">What is the difficulty of this question?</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="gaia" name="gaia" type="text" class="validate" required>
+                        <label for="gaia" data-error="This field is required!">What is the topic of this quiz? *</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 file-field">
+                        <div class="btn">
+                            <span>Related image</span>
+                            <input name="file" type="file" id="fitxategia" accept="image/*">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path" type="text">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s6 push-s3">
+                        <img id="aurreikusi" src="/favicon.ico" style="max-width:100%;display: none">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s4 push-s4">
+                        <button class="btn waves-effect waves-light" id="submit" type="submit" name="submit">Submit
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+
+<footer class="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">About</h5>
+                <p class="grey-text text-lighten-4">This is a website made by Elena Hernandez and Aritz Lopez, two
+                    computer science students, for their Web Systems subject.</p>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                    <li><a class="grey-text text-lighten-3" href="#!">What is a Quiz?</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!">GitHub Repo</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            © 2017 Copyright Elena Hernandez &amp; Aritz Lopez
+        </div>
+    </div>
+</footer>
+</body>
+</html>
