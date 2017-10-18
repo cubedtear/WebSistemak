@@ -6,7 +6,7 @@
                 <li><a href="/layout.php">Home</a></li>
                 <li><a href="/addQuestion5.php">Add quiz</a></li>
                 <li><a href="/showQuestions.php">Show quizzes</a></li>
-                <li><a href="/credits.html">Credits</a></li>
+                <li><a href="/credits.php">Credits</a></li>
             </ul>
         </div>
     </nav>
