@@ -2,11 +2,11 @@
 <html>
 <head>
     <?php
-    require_once "parts/head.php";
+    require "parts/head.php";
     ?>
 <body>
 <?php
-require_once "parts/header.php";
+require "parts/header.php";
 ?>
 
 <main>

@@ -9,7 +9,6 @@
 </head>
 <body>
 <?php
-
 require_once "parts/header.php";
 
 ?>
@@ -31,7 +30,7 @@ require_once "parts/header.php";
         </div>
         <div class="row">
             <div class="col s12 center-align">
-                <a href="addQuestion5.php" class="btn btn-block">HTML5</a>
+                <a href="<?= get_link("addQuestionWithImages.php") ?>" class="btn btn-block">HTML5</a>
             </div>
         </div>
     </div>
