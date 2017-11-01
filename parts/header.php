@@ -1,12 +1,31 @@
+<?php require_once __DIR__ . "/../session.php"; ?>
+
 <header class='main' id='h1'>
     <nav>
         <div class="nav-wrapper" style="padding-left: 32px">
-            <a href="/layout.php" class="brand-logo">Quizzes</a>
+            <a href="<?= get_link("/layout.php") ?>" class="brand-logo">Quizzes</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="/layout.php">Home</a></li>
-                <li><a href="/addQuestion5.php">Add quiz</a></li>
-                <li><a href="/showQuestions.php">Show quizzes</a></li>
-                <li><a href="/credits.php">Credits</a></li>
+                <li><a href="<?= get_link("/layout.php") ?>">Home</a></li>
+                <?php
+                if (is_logged_in()) {
+                    ?>
+                    <li><a href="<?= get_link("/addQuestionWithImages.php") ?>">Add quiz</a></li>
+                    <li><a href="<?= get_link("/showQuestionsWithImages.php") ?>">Show quizzes</a></li>
+                    <li><a href="<?= get_link("/login.php?logout"); ?>">
+                            <div style="display: flex; align-items: center">
+                                Log out
+                                <img style='max-height: 50px;max-width: 200px; margin-left: 16px' src="/img.php?id=<?= get_user_from_token($_GET["token"]) ?>">
+                            </div>
+                        </a>
+                    </li>
+                    <?php
+                } else {
+                    ?>
+                    <li><a href="/login.php">Log in</a></li>
+                    <li><a href="/signUp.php">Sign up</a></li>
+                    <?php
+                }
+                ?>
             </ul>
         </div>
     </nav>
