@@ -212,3 +212,32 @@ function get_quiz_image($id)
     }
     return null;
 }
+
+function get_my_question_count($token) {
+    global $mysqli;
+
+    $email = get_user_email(get_user_from_token($token));
+
+    $stmt = $mysqli->stmt_init();
+    $stmt->prepare("SELECT id FROM Questions WHERE email = ?");
+    $stmt->bind_param("s", $email);
+
+    if ($result = $stmt->execute()) {
+        $stmt->store_result();
+        return $stmt->num_rows;
+    }
+    return 0;
+}
+
+function get_questions_count() {
+    global $mysqli;
+
+    $stmt = $mysqli->stmt_init();
+    $stmt->prepare("SELECT id FROM Questions");
+
+    if ($result = $stmt->execute()) {
+        $stmt->store_result();
+        return $stmt->num_rows;
+    }
+    return 0;
+}

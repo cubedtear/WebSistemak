@@ -9,9 +9,10 @@
                 <?php
                 if (is_logged_in()) {
                     ?>
-                    <li><a href="<?= get_link("/addQuestionWithImages.php") ?>">Add quiz</a></li>
-                    <li><a href="<?= get_link("/showQuestionsWithImages.php") ?>">Show quizzes</a></li>
-                    <li><a href="<?= get_link("/login.php?logout"); ?>">
+<!--                    <li><a href="--><?//= get_link("/addQuestionWithImages.php") ?><!--">Add quiz</a></li>-->
+                    <li><a href="<?= get_link("/handlingQuizes.php") ?>">Handling quizes</a></li>
+                    <li><a href="<?= get_link("/showQuestionsWithImages.php") ?>">Show quizes</a></li>
+                    <li><a href="<?= get_link("/logOut.php"); ?>">
                             <div style="display: flex; align-items: center">
                                 Log out
                                 <img style='max-height: 50px;max-width: 200px; margin-left: 16px' src="/img.php?id=<?= get_user_from_token($_GET["token"]) ?>">

@@ -6,12 +6,6 @@ require_once __DIR__ . "/session.php";
 
 $errored = false;
 
-if (isset($_GET["logout"])) {
-    log_out();
-    header('Location: /layout.php');
-    die();
-}
-
 if (is_logged_in()) {
     redirect("/layout.php");
 }
@@ -23,6 +17,11 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 
     $id = check_credentials($email, $pass);
     if (!is_null($id)) {
+
+        $xml = new SimpleXMLElement(file_get_contents("xml/counter.xml"));
+        $xml[0] = intval($xml[0])+1;
+        $xml->asXML("xml/counter.xml");
+
         redirect("/layout.php?token=" . get_user_token($id));
         die();
     } else {
