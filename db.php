@@ -72,7 +72,6 @@ function sign_up($email, $name, $username, $pass, $image)
     if ($result = $stmt->execute()) {
         return $mysqli->insert_id;
     }
-    echo $mysqli->error;
     return null;
 }
 
@@ -182,7 +181,8 @@ function get_user_email($userid)
     return null;
 }
 
-function remove_token($token) {
+function remove_token($token)
+{
     global $mysqli;
 
     $ip = $_SERVER['REMOTE_ADDR'];
@@ -213,7 +213,8 @@ function get_quiz_image($id)
     return null;
 }
 
-function get_my_question_count($token) {
+function get_my_question_count($token)
+{
     global $mysqli;
 
     $email = get_user_email(get_user_from_token($token));
@@ -229,7 +230,8 @@ function get_my_question_count($token) {
     return 0;
 }
 
-function get_questions_count() {
+function get_questions_count()
+{
     global $mysqli;
 
     $stmt = $mysqli->stmt_init();
@@ -240,4 +242,22 @@ function get_questions_count() {
         return $stmt->num_rows;
     }
     return 0;
+}
+
+function get_question_for_soap($id)
+{
+    global $mysqli;
+
+    $stmt = $mysqli->stmt_init();
+    $stmt->prepare("SELECT question, correct_answer, difficulty FROM Questions WHERE id = ? LIMIT 1");
+    $stmt->bind_param("i", $id);
+    if ($result = $stmt->execute()) {
+        $stmt->store_result();
+        if ($stmt->num_rows == 1) {
+            $stmt->bind_result($question, $correct, $diff);
+            $stmt->fetch();
+            return array("testua" => $question, "zuzena" => $correct, "zailtasuna" => $diff);
+        }
+    }
+    return null;
 }

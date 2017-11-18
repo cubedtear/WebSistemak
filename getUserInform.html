@@ -37,8 +37,10 @@
 
                $.get("xml/erabiltzaileak.xml", function (d) {
                    erabiltzaileak = $(d).find('erabiltzailea');
+                   var aurkitua = false;
                    erabiltzaileak.each(function (i, erabiltzaile) {
                        if ($(erabiltzaile).find("eposta")[0].innerHTML === email) {
+                           aurkitua = true;
                            var name = $(erabiltzaile).find("izena")[0].innerHTML;
                            var surname = $(erabiltzaile).find("abizena1")[0].innerHTML + " " + $(erabiltzaile).find("abizena2")[0].innerHTML;
                            var phone = $(erabiltzaile).find("telefonoa")[0].innerHTML;
@@ -47,6 +49,9 @@
                            $("#phone").val(phone);
                        }
                    });
+                   if (!aurkitua) {
+                       $("#name").val("Ez da aurkitu");
+                   }
                })
            })
         });

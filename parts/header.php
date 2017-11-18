@@ -10,6 +10,7 @@
                 if (is_logged_in()) {
                     ?>
 <!--                    <li><a href="--><?//= get_link("/addQuestionWithImages.php") ?><!--">Add quiz</a></li>-->
+                    <li><a href="<?= get_link("/getQuestions.php") ?>">Get question SOAP</a></li>
                     <li><a href="<?= get_link("/handlingQuizes.php") ?>">Handling quizes</a></li>
                     <li><a href="<?= get_link("/showQuestionsWithImages.php") ?>">Show quizes</a></li>
                     <li><a href="<?= get_link("/logOut.php"); ?>">

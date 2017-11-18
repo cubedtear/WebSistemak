@@ -3,27 +3,60 @@
 require_once "db.php";
 
 $errored = false;
+$errored2 = false;
+$errored3 = false;
 
 if (isset($_POST["user"])) {
-    // TODO Register
+
+    require_once "vendor/nusoap/nusoap.php";
+
+
+    function egiaztatu_email($email)
+    {
+        try {
+            $bezeroa = new SoapClient("http://ehusw.es/rosa/webZerbitzuak/egiaztatuMatrikula.php?wsdl");
+            $emaitza = $bezeroa->egiaztatuE($email);
+            return strpos($emaitza, "BAI") === 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    function check_password($pass) {
+        try {
+            $bezeroa = new SoapClient("https://$_SERVER[HTTP_HOST]/egiaztatuPasahitza.php?wsdl");
+            $emaitza = $bezeroa->check_pass($pass);
+            return strpos($emaitza, "BALIOZKOA") === 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 
     $email = $_POST["email"];
     $name = $_POST["izena"];
     $user = $_POST["user"];
     $pass = $_POST["password"];
 
-    $argazki = get_default_profile_image();
-    if (strlen($_FILES["file"]["name"]) > 0) {
-        $data = resize_image($_FILES["file"]);
-        $argazki = base64_encode($data);
+    if (!egiaztatu_email($email)) {
+        $errored2 = true;
+    } else if (!check_password($pass)) {
+        $errored3 = true;
     }
 
-    $id = sign_up($email, $name, $user, $pass, $argazki);
-    if ($id != null) {
-        header("Location: /layout.php");
-        die();
-    } else {
-        $errored = true;
+    if (!$errored2 && !$errored3) {
+        $argazki = get_default_profile_image();
+        if (strlen($_FILES["file"]["name"]) > 0) {
+            $data = resize_image($_FILES["file"]);
+            $argazki = base64_encode($data);
+        }
+
+        $id = sign_up($email, $name, $user, $pass, $argazki);
+        if ($id != null) {
+            header("Location: /layout.php");
+            die();
+        } else {
+            $errored = true;
+        }
     }
 }
 
@@ -56,7 +89,13 @@ require_once "parts/header.php"
                 <form class="col s6 push-s3" action="signUp.php" id="signupform" name="signupform" method="post" enctype="multipart/form-data">
                     <?php
                     if ($errored) {
-                        echo "<div class='col s12 center-align'><h4>Error: Username already taken!</h4></div>";
+                        echo "<div class='col s12 center-align'><h4>Error: Email already taken!</h4></div>";
+                    }
+                    if ($errored2) {
+                        echo "<div class='col s12 center-align'><h4>Error: You are not registered in the subject!</h4></div>";
+                    }
+                    if ($errored3) {
+                        echo "<div class='col s12 center-align'><h4>Error: Your password is too weak!</h4></div>";
                     }
                     ?>
                     <div class="row">
