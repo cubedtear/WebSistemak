@@ -23,16 +23,6 @@ require_once "parts/header.php";
                 <h4>Welcome to the best quizzes of the interwebs!</h4>
             </div>
         </div>
-        <div class="row">
-            <div class="col s12 center-align">
-                <h5>Formularioak:</h5>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12 center-align">
-                <a href="<?= get_link("addQuestionWithImages.php") ?>" class="btn btn-block">HTML5</a>
-            </div>
-        </div>
     </div>
 </main>
 

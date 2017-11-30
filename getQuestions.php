@@ -47,7 +47,6 @@ require_once "parts/header.php"
         <div class="row">
             <div class="col s4 push-s4 center-align">
                 <form action="getQuestions.php" method="GET">
-                    <input type="hidden" name="token" value="<?= $_GET["token"] ?>">
                     <div class="input-field">
                         <input type="number" id="id" name="id" value="<?= isset($_GET["id"]) ? $_GET["id"] : 48 ?>">
                         <label for="id">Question id: </label>

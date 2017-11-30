@@ -13,7 +13,7 @@ require_once __DIR__ . "/../session.php";
             <div class="col l4 offset-l2 s12">
                 <h5 class="white-text">Links</h5>
                 <ul>
-                    <li><a class="grey-text text-lighten-3" href="<?= get_link("/credits.php") ?>">Credits</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/credits.php"">Credits</a></li>
                     <li><a class="grey-text text-lighten-3" href="https://en.wikipedia.org/wiki/Quiz">What is a Quiz?</a></li>
                     <li><a class="grey-text text-lighten-3" href="https://github.com/cubedtear/WebSistemak">GitHub Repo</a></li>
                 </ul>

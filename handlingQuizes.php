@@ -14,7 +14,7 @@ if (isset($_GET["myquestions"])) {
         die();
     }
 
-    $my_questions = get_my_question_count($_GET["token"]);
+    $my_questions = get_my_question_count(get_user_id());
     $total = get_questions_count();
 
     echo $my_questions . " / " . $total;
@@ -27,7 +27,7 @@ if (isset($_GET["user_count"])) {
     die();
 }
 
-if (!is_logged_in()) {
+if (!is_logged_in() || !is_user()) {
     redirect("/login.php");
 }
 
@@ -35,7 +35,7 @@ if (isset($_POST['email']) && isset($_POST['galdera']) && isset($_POST['erantzun
     isset($_POST['erantzun_okerra1']) && isset($_POST['erantzun_okerra2']) && isset($_POST['erantzun_okerra3']) &&
     isset($_POST['zailtasuna']) && isset($_POST['gaia'])) {
 
-    $email = trim(get_user_email(get_user_from_token($_GET["token"])));
+    $email = trim(get_user_email(get_user_id()));
     $galdera = trim($_POST['galdera']);
     $erantzun_zuzena = trim($_POST['erantzun_zuzena']);
     $erantzun_okerra1 = trim($_POST['erantzun_okerra1']);
@@ -92,9 +92,9 @@ if (isset($_POST['email']) && isset($_POST['galdera']) && isset($_POST['erantzun
     $incorrect->addChild("value")[0] = $erantzun_okerra2;
     $incorrect->addChild("value")[0] = $erantzun_okerra3;
     if (!file_put_contents("xml/questions.xml", $xml->asXML()) || !$result) {
-        orri_sinple("<h3>Your question cannot be added, wanna try again? <a href='" . get_link("/addQuestionWithImages.php") . "'>Do it here!</a></h3>");
+        orri_sinple("<h3>Your question cannot be added, wanna try again? <a href='/addQuestionWithImages.php'>Do it here!</a></h3>");
     } else {
-        orri_sinple("<h3>Your question has been recorded successfully.<br>If you want to see all the questions, <br><ul><li><a href='" . get_link("/showQuestionsWithImages.php") . "'>From the DB!</a></li><li><a href='" . get_link("/showXMLQuestions.php") . "'>From the XML!</a></li></h3>");
+        orri_sinple("<h3>Your question has been recorded successfully.<br>If you want to see all the questions, <br><ul><li><a href='/showQuestionsWithImages.php'>From the DB!</a></li><li><a href='/showXMLQuestions.php'>From the XML!</a></li></h3>");
     }
 
     die();
@@ -109,11 +109,6 @@ if (isset($_POST['email']) && isset($_POST['galdera']) && isset($_POST['erantzun
     require_once "parts/head.php";
     ?>
     <script language="JavaScript" src="js/lab5.js" defer></script>
-    <script language="JavaScript">
-        // Set the token, so that AJAX requests check that the user is logged in
-        var token = "<?= $_GET["token"] ?>"
-    </script>
-
     <style>
         body {
             display: flex;
@@ -144,7 +139,7 @@ require_once "parts/header.php";
 
 <main>
     <div class="row">
-        <form class="col s4 push-s1" action="<?= get_link("/addQuestionWithImages.php") ?>" id="galderenF" name="galderenF" method="post" enctype="multipart/form-data">
+        <form class="col s4 push-s1" action="/addQuestionWithImages.php" id="galderenF" name="galderenF" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col s12 center-align">
 
@@ -156,7 +151,7 @@ require_once "parts/header.php";
                 }
                 ?>
                 <div class="input-field col s12">
-                    <input name="email" placeholder="xxxxx123@ikasle.ehu.es" readonly="readonly" id="email" type="text" value="<?= get_user_email(get_user_from_token($_GET["token"])) ?>"><!--class="validate" required pattern="[a-zA-Z]{2,}[0-9]{3}@ikasle\.ehu\.eu?s"-->
+                    <input name="email" placeholder="xxxxx123@ikasle.ehu.es" readonly="readonly" id="email" type="text" value="<?= get_user_email(get_user_id()) ?>"><!--class="validate" required pattern="[a-zA-Z]{2,}[0-9]{3}@ikasle\.ehu\.eu?s"-->
                     <label for="email" data-error="Wrong email">Email *</label>
                 </div>
                 <div class="input-field col s12">

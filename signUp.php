@@ -70,6 +70,25 @@ if (isset($_POST["user"])) {
     <?php
     require_once "parts/head.php";
     ?>
+    <script language="JavaScript">
+        function init_function() {
+
+            $('#signupform').submit(function () {
+                var password = $('#password');
+                var confirm_password = $('#password2');
+                if(password.val() == confirm_password.val()) {
+                    password.removeClass("invalid");
+                    confirm_password.removeClass("invalid");
+                    return true;
+                } else {
+                    password.addClass("invalid");
+                    confirm_password.addClass("invalid").focus();
+                    return false;
+                }
+            });
+
+        }
+    </script>
 </head>
 <body>
 
@@ -100,7 +119,7 @@ require_once "parts/header.php"
                     ?>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input name="email" placeholder="xxxxx123@ikasle.ehu.es" id="email" type="email" class="validate" required pattern="[a-zA-Z]{2,}[0-9]{3}@ikasle\.ehu\.eu?s">
+                            <input name="email" placeholder="xxxxx123@ikasle.ehu.es" id="email" type="email" class="validate" required pattern="[a-zA-Z]{2,}[0-9]{3}@(ikasle\.)?ehu\.eu?s">
                             <label for="email" data-error="Wrong email">Email *</label>
                         </div>
                     </div>

@@ -9,35 +9,31 @@ $(function () {
             }
         };
 
-        xhro.open("GET", "/showQuestionsAJAX.php?token=" + token);
+        xhro.open("GET", "/showQuestionsAJAX.php");
         xhro.send(null);
     });
 
     $("#galderenF").submit(function (t) {
         $("#emaitza").html("");
-
-        console.log($('#galderenF').serialize());
-        $.post('addQuestionAJAX.php?token=' + token, $('#galderenF').serialize()).done(function (result) {
+        $.post('addQuestionAJAX.php', $('#galderenF').serialize()).done(function (result) {
             $("#emaitza").html(result);
         });
-
         return false;
     });
 
-
-    $.get('handlingQuizes.php?myquestions&token=' + token).done(function (result) {
+    $.get('handlingQuizes.php?myquestions').done(function (result) {
         $("#question_count").html(result);
     });
 
-    $.get('handlingQuizes.php?user_count&token=' + token).done(function (result) {
+    $.get('handlingQuizes.php?user_count').done(function (result) {
         $("#user_count").html(result);
     });
 
     setInterval(function () {
-        $.get('handlingQuizes.php?myquestions&token=' + token).done(function (result) {
+        $.get('handlingQuizes.php?myquestions').done(function (result) {
             $("#question_count").html(result);
         });
-        $.get('handlingQuizes.php?user_count&token=' + token).done(function (result) {
+        $.get('handlingQuizes.php?user_count').done(function (result) {
             $("#user_count").html(result);
         });
     }, 20000)

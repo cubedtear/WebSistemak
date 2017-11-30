@@ -4,10 +4,17 @@ require_once "db.php";
 require_once "session.php";
 require_once __DIR__ . "/session.php";
 
-$errored = false;
-
 if (is_logged_in()) {
     redirect("/layout.php");
+}
+
+if (isset($_GET["token"])) {
+    $token = $_GET["token"];
+    $userid = get_user_id_from_unlock_token($token);
+    if (!is_null($userid)) {
+        unlock_account($userid);
+        $error = "Account unlocked<br>Log in";
+    }
 }
 
 if (isset($_POST['email']) && isset($_POST['password'])) {
@@ -16,16 +23,23 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     $pass = $_POST['password'];
 
     $id = check_credentials($email, $pass);
-    if (!is_null($id)) {
-
+    if ($id > 0) {
         $xml = new SimpleXMLElement(file_get_contents("xml/counter.xml"));
         $xml[0] = intval($xml[0])+1;
         $xml->asXML("xml/counter.xml");
 
-        redirect("/layout.php?token=" . get_user_token($id));
+        if ($email == "web000@ehu.es") {
+            log_in_as(Rol::Teacher, $id);
+            redirect("/reviewingQuizes.php");
+        } else {
+            log_in_as(Rol::User, $id);
+            redirect("/handlingQuizes.php");
+        }
         die();
+    } else if ($id == 0) {
+        $error = "Error: Too many attempts<br>Your account has been blocked!<br>Check your email to restore it";
     } else {
-        $errored = true;
+        $error = "Error: Incorrect email or password!";
     }
 }
 ?>
@@ -53,13 +67,13 @@ require_once "parts/header.php"
             <div class="col s12 center-align">
                 <form class="col s6 push-s3" action="login.php" id="loginform" name="loginform" method="post" enctype="multipart/form-data">
                     <?php
-                    if ($errored) {
-                        echo "<div class='col s12 center-align'><h4>Error: Incorrect email or password!</h4></div>";
+                    if (isset($error)) {
+                        echo "<div class='col s12 center-align'><h4>$error</h4></div>";
                     }
                     ?>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input name="email" placeholder="xxxxx123@ikasle.ehu.es" id="email" type="email" class="validate" required pattern="[a-zA-Z]{2,}[0-9]{3}@ikasle\.ehu\.eu?s">
+                            <input name="email" placeholder="xxxxx123@ikasle.ehu.es" id="email" type="email" class="validate" required pattern="[a-zA-Z]{2,}[0-9]{3}@(ikasle\.)?ehu\.eu?s">
                             <label for="email" data-error="Wrong email">Email *</label>
                         </div>
                     </div>
@@ -86,7 +100,12 @@ require_once "parts/header.php"
         </div>
         <div class="row">
             <div class="col s12 center-align">
-                Don't have an account? <a href="<?= get_link("signUp.php") ?>">Create one!</a>
+                <a href="accountRecovery.php">Forgot your password?</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 center-align">
+                Don't have an account? <a href="signUp.php">Create one!</a>
             </div>
         </div>
     </div>

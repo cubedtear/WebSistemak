@@ -13,7 +13,7 @@ if (isset($_POST['email']) && isset($_POST['galdera']) && isset($_POST['erantzun
     isset($_POST['erantzun_okerra1']) && isset($_POST['erantzun_okerra2']) && isset($_POST['erantzun_okerra3']) &&
     isset($_POST['zailtasuna']) && isset($_POST['gaia'])) {
 
-    $email = trim(get_user_email(get_user_from_token($_GET["token"])));
+    $email = trim(get_user_email(get_user_id()));
     $galdera = trim($_POST['galdera']);
     $erantzun_zuzena = trim($_POST['erantzun_zuzena']);
     $erantzun_okerra1 = trim($_POST['erantzun_okerra1']);
