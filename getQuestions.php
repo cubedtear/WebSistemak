@@ -6,7 +6,7 @@ if (!is_logged_in()) {
     redirect("/login.php");
 }
 
-function get_question_data($id)
+function get_question_data_soap($id)
 {
     try {
         $bezeroa = new SoapClient("https://$_SERVER[HTTP_HOST]/getQuestionWZ.php?wsdl");
@@ -18,7 +18,7 @@ function get_question_data($id)
 }
 
 if (isset($_GET["id"])) {
-    $galdera = get_question_data($_GET["id"]);
+    $galdera = get_question_data_soap($_GET["id"]);
 }
 
 ?>
