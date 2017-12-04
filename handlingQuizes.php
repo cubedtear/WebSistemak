@@ -22,8 +22,8 @@ if (isset($_GET["myquestions"])) {
 }
 
 if (isset($_GET["user_count"])) {
-    $xml = new SimpleXMLElement(file_get_contents("xml/counter.xml"));
-    echo $xml[0];
+    // TODO User count
+    echo "";
     die();
 }
 
@@ -76,25 +76,10 @@ if (isset($_POST['email']) && isset($_POST['galdera']) && isset($_POST['erantzun
     }
     $stmt->bind_param("ssssssiss", $email, $galdera, $erantzun_zuzena, $erantzun_okerra1, $erantzun_okerra2, $erantzun_okerra3, $zailtasuna, $gaia, $argazki);
 
-    $result = $stmt->execute();
-
-
-    $xmlstr = file_get_contents("xml/questions.xml");
-    $xml = new SimpleXMLElement($xmlstr);
-
-    $quiz = $xml->addChild("assesmentItem");
-    $quiz->addAttribute('complexity', $zailtasuna);
-    $quiz->addAttribute('subject', $gaia);
-    $body = $quiz->addChild("itemBody")->addChild("p")[0] = $galdera;
-    $quiz->addChild("correctResponse")->addChild("value")[0] = $erantzun_zuzena;
-    $incorrect = $quiz->addChild("incorrectResponses");
-    $incorrect->addChild("value")[0] = $erantzun_okerra1;
-    $incorrect->addChild("value")[0] = $erantzun_okerra2;
-    $incorrect->addChild("value")[0] = $erantzun_okerra3;
-    if (!file_put_contents("xml/questions.xml", $xml->asXML()) || !$result) {
+    if (!$stmt->execute()) {
         orri_sinple("<h3>Your question cannot be added, wanna try again? <a href='/addQuestionWithImages.php'>Do it here!</a></h3>");
     } else {
-        orri_sinple("<h3>Your question has been recorded successfully.<br>If you want to see all the questions, <br><ul><li><a href='/showQuestionsWithImages.php'>From the DB!</a></li><li><a href='/showXMLQuestions.php'>From the XML!</a></li></h3>");
+        orri_sinple("<h3>Your question has been recorded successfully.<br>If you want to see all the questions, <br><ul><li><a href='/showQuestionsWithImages.php'>From the DB!</a></li></h3>");
     }
 
     die();

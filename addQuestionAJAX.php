@@ -52,34 +52,11 @@ if (isset($_POST['email']) && isset($_POST['galdera']) && isset($_POST['erantzun
 
     $result = $stmt->execute();
 
-
-    $xmlstr = file_get_contents("xml/questions.xml");
-    $xml = new SimpleXMLElement($xmlstr);
-
-    $quiz = $xml->addChild("assesmentItem");
-    $quiz->addAttribute('complexity', $zailtasuna);
-    $quiz->addAttribute('subject', $gaia);
-    $body = $quiz->addChild("itemBody")->addChild("p")[0] = $galdera;
-    $quiz->addChild("correctResponse")->addChild("value")[0] = $erantzun_zuzena;
-    $incorrect = $quiz->addChild("incorrectResponses");
-    $incorrect->addChild("value")[0] = $erantzun_okerra1;
-    $incorrect->addChild("value")[0] = $erantzun_okerra2;
-    $incorrect->addChild("value")[0] = $erantzun_okerra3;
-
-    $xmlresult = file_put_contents("xml/questions.xml", $xml->asXML());
-
     if ($result) {
         echo "Question added to the DB";
     } else {
         echo "Error adding the question to the DB";
     }
-    echo "<br>";
-    if ($xmlresult) {
-        echo "Question added to the XML";
-    } else {
-        echo "Error adding the question to the XML";
-    }
-
 
     die();
 }

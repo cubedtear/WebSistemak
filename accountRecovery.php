@@ -6,7 +6,8 @@ if (is_logged_in()) {
     redirect("/layout.php");
 }
 
-function check_password($pass) {
+function check_password($pass)
+{
     try {
         $bezeroa = new SoapClient("https://$_SERVER[HTTP_HOST]/egiaztatuPasahitza.php?wsdl");
         $emaitza = $bezeroa->check_pass($pass);

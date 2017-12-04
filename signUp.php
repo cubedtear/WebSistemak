@@ -22,7 +22,8 @@ if (isset($_POST["user"])) {
         }
     }
 
-    function check_password($pass) {
+    function check_password($pass)
+    {
         try {
             $bezeroa = new SoapClient("https://$_SERVER[HTTP_HOST]/egiaztatuPasahitza.php?wsdl");
             $emaitza = $bezeroa->check_pass($pass);
@@ -76,7 +77,7 @@ if (isset($_POST["user"])) {
             $('#signupform').submit(function () {
                 var password = $('#password');
                 var confirm_password = $('#password2');
-                if(password.val() == confirm_password.val()) {
+                if (password.val() == confirm_password.val()) {
                     password.removeClass("invalid");
                     confirm_password.removeClass("invalid");
                     return true;

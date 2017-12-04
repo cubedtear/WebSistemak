@@ -6,11 +6,8 @@ if (!is_logged_in()) {
     die();
 }
 
-
-$xml = new SimpleXMLElement(file_get_contents("xml/questions.xml"));
-
-foreach ($xml->children() as $child) {
+foreach (get_questions() as $question) {
     echo "<tr>";
-    echo "<td>" . $child->itemBody->p[0] . "</td>";
+    echo "<td>" . $question["galdera"] . "</td>";
     echo "</tr>";
 }

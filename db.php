@@ -168,7 +168,8 @@ function change_password($userid, $pass)
     return false;
 }
 
-function unlock_account($userid) {
+function unlock_account($userid)
+{
     global $mysqli;
     $stmt = $mysqli->stmt_init();
     $stmt->prepare("UPDATE Users SET login_attempts = 0 WHERE id = ?");
@@ -218,7 +219,7 @@ function check_credentials($email, $pass)
                 $stmt->prepare("UPDATE Users SET login_attempts = login_attempts+1 WHERE id = ?");
                 $stmt->bind_param("s", $id);
                 $stmt->execute();
-                if ($login_attempts+1 >= 3) {
+                if ($login_attempts + 1 >= 3) {
                     $userid = get_userid_from_email($email);
                     $token = generate_unlock_token($userid);
 

@@ -24,9 +24,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 
     $id = check_credentials($email, $pass);
     if ($id > 0) {
-        $xml = new SimpleXMLElement(file_get_contents("xml/counter.xml"));
-        $xml[0] = intval($xml[0])+1;
-        $xml->asXML("xml/counter.xml");
+        // TODO Increase logged in count
 
         if ($email == "web000@ehu.es") {
             log_in_as(Rol::Teacher, $id);
