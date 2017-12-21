@@ -71,13 +71,17 @@ require_once "parts/header.php";
                 } else {
                     $except = $_SESSION["except"];
                 }
-
                 $question = get_random_question($except);
                 if (is_null($question)) {
                     ?>
                     <div class="row" style="margin-top: 16px">
                         <div class="col s12 center-align input-field">
-                            <h4>There are no questions for you!</h4>
+                            <h4>There are no more questions for you!</h4>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 16px">
+                        <div class="col s12 center-align input-field">
+                            <h4><a href="login.php">Maybe create a new one?</a></h4>
                         </div>
                     </div>
                     <?php
@@ -133,7 +137,7 @@ require_once "parts/header.php";
 
                     <div class="row" id="new_question" style="display: none;">
                         <div class="col s6 push-s3 center-align">
-                            <a class="btn btn-block" href="#" id="send">Get another question</a>
+                            <a class="btn btn-block" href="OnePlay.php" id="send">Get another question</a>
                         </div>
                     </div>
                     <?php

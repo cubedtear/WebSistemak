@@ -109,25 +109,30 @@ function get_random_question($except)
 {
     global $mysqli;
     $stmt = $mysqli->stmt_init();
-    $stmt->prepare("SELECT id, email, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic FROM Questions WHERE id NOT IN ( ? ) ORDER BY RAND() ASC LIMIT 1");
-    $all_ids = implode($except, "', '");
+    $query = "SELECT id, email, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic FROM Questions WHERE id NOT IN ( ? ) ORDER BY RAND() ASC LIMIT 1";
+    $all_ids = "'" . implode($except, "', '") . "'";
+    $query = str_replace("?", $all_ids, $query);
+    $stmt->prepare($query);
+
     $stmt->bind_param("s", $all_ids);
 
     if ($result = $stmt->execute()) {
         $stmt->store_result();
         $stmt->bind_result($id, $email, $galdera, $erantzun_zuzena, $erantzun_okerra1, $erantzun_okerra2, $erantzun_okerra3, $zailtasuna, $gaia);
         $stmt->fetch();
-        return array(
-            "id" => $id,
-            "email" => $email,
-            "galdera" => $galdera,
-            "ez" => $erantzun_zuzena,
-            "eo1" => $erantzun_okerra1,
-            "eo2" => $erantzun_okerra2,
-            "eo3" => $erantzun_okerra3,
-            "zailtasuna" => $zailtasuna,
-            "gaia" => $gaia
-        );
+        if ($stmt->num_rows == 1) {
+            return array(
+                "id" => $id,
+                "email" => $email,
+                "galdera" => $galdera,
+                "ez" => $erantzun_zuzena,
+                "eo1" => $erantzun_okerra1,
+                "eo2" => $erantzun_okerra2,
+                "eo3" => $erantzun_okerra3,
+                "zailtasuna" => $zailtasuna,
+                "gaia" => $gaia
+            );
+        }
     }
     return null;
 }

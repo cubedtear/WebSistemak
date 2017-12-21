@@ -67,3 +67,10 @@ erabiliz, eta MySQL-ren kontsulta luze baina bakar batekin, nahi ditugun
 datuak lortu ditzakegu, `COUNT`, `JOIN`, `GROUP BY`, `ORDER BY` eta `LIMIT`
 klausulak erabilita. Azkenik lortzen ditugun hamar horiek taula batean
 erakusten ditugu.
+
+> Kontuan izan behar da goitizen hauek ez daudela erlazionatuta
+kautotutako erabiltzaileen goitizenekin. Hortaz ez dago modurik jakiteko
+bi erabiltzaile berdinak diren, eta hortaz edonorrek erabili ahal izango
+du edozein goitizen, eta ez dago murriztapenik goitizenen erabilerarekin,
+hau da, goitizenak nahi adina alditan erabili daitzeke, goitizen horrek
+hainbat galdera zuzen erantzun ahal izateko, Top 10-ean agertzeko.
