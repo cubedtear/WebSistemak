@@ -33,11 +33,28 @@ function remove_question($id)
     $stmt->execute();
 }
 
+function get_topics()
+{
+    global $mysqli;
+    $stmt = $mysqli->stmt_init();
+    $stmt->prepare("SELECT DISTINCT topic FROM Questions");
+    if ($result = $stmt->execute()) {
+        $stmt->store_result();
+        $stmt->bind_result($gaia);
+        $res = array();
+        while ($stmt->fetch()) {
+            $res[] = $gaia;
+        }
+        return $res;
+    }
+    return null;
+}
+
 function get_questions()
 {
     global $mysqli;
     $stmt = $mysqli->stmt_init();
-    $stmt->prepare("SELECT id, email, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic FROM Quiz.Questions ORDER BY id ASC");
+    $stmt->prepare("SELECT id, email, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic FROM Questions ORDER BY id ASC");
 
     if ($result = $stmt->execute()) {
         $stmt->store_result();
@@ -57,6 +74,60 @@ function get_questions()
             );
         }
         return $res;
+    }
+    return null;
+}
+
+function get_3_random_questions_with_topic($topic)
+{
+    global $mysqli;
+    $stmt = $mysqli->stmt_init();
+    $stmt->prepare("SELECT id, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic FROM Questions WHERE topic = ? ORDER BY RAND() LIMIT 3");
+    $stmt->bind_param("s", $topic);
+    if ($result = $stmt->execute()) {
+        $stmt->store_result();
+        $stmt->bind_result($id, $galdera, $erantzun_zuzena, $erantzun_okerra1, $erantzun_okerra2, $erantzun_okerra3, $zailtasuna, $gaia);
+        $res = array();
+        while ($stmt->fetch()) {
+            $res[] = array(
+                "id" => $id,
+                "galdera" => $galdera,
+                "ez" => $erantzun_zuzena,
+                "eo1" => $erantzun_okerra1,
+                "eo2" => $erantzun_okerra2,
+                "eo3" => $erantzun_okerra3,
+                "zailtasuna" => $zailtasuna,
+                "gaia" => $gaia
+            );
+        }
+        return $res;
+    }
+    return null;
+}
+
+function get_random_question($except)
+{
+    global $mysqli;
+    $stmt = $mysqli->stmt_init();
+    $stmt->prepare("SELECT id, email, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic FROM Questions WHERE id NOT IN ( ? ) ORDER BY RAND() ASC LIMIT 1");
+    $all_ids = implode($except, "', '");
+    $stmt->bind_param("s", $all_ids);
+
+    if ($result = $stmt->execute()) {
+        $stmt->store_result();
+        $stmt->bind_result($id, $email, $galdera, $erantzun_zuzena, $erantzun_okerra1, $erantzun_okerra2, $erantzun_okerra3, $zailtasuna, $gaia);
+        $stmt->fetch();
+        return array(
+            "id" => $id,
+            "email" => $email,
+            "galdera" => $galdera,
+            "ez" => $erantzun_zuzena,
+            "eo1" => $erantzun_okerra1,
+            "eo2" => $erantzun_okerra2,
+            "eo3" => $erantzun_okerra3,
+            "zailtasuna" => $zailtasuna,
+            "gaia" => $gaia
+        );
     }
     return null;
 }
@@ -160,7 +231,7 @@ function change_password($userid, $pass)
     $password = password_hash($pass, PASSWORD_BCRYPT);
 
     $stmt = $mysqli->stmt_init();
-    $stmt->prepare("UPDATE Quiz.Users SET password = ? WHERE id = ?");
+    $stmt->prepare("UPDATE Users SET password = ? WHERE id = ?");
     $stmt->bind_param("si", $password, $userid);
     if ($result = $stmt->execute()) {
         return true;
@@ -181,7 +252,7 @@ function get_userid_from_email($email)
 {
     global $mysqli;
     $stmt = $mysqli->stmt_init();
-    $stmt->prepare("SELECT id FROM Quiz.Users WHERE email = ? LIMIT 1");
+    $stmt->prepare("SELECT id FROM Users WHERE email = ? LIMIT 1");
     $stmt->bind_param("s", $email);
     if ($result = $stmt->execute()) {
         $stmt->store_result();
@@ -199,7 +270,7 @@ function check_credentials($email, $pass)
     global $mysqli;
     $stmt = $mysqli->stmt_init();
 
-    $stmt->prepare("SELECT id, password, login_attempts FROM Quiz.Users WHERE email = ? LIMIT 1");
+    $stmt->prepare("SELECT id, password, login_attempts FROM Users WHERE email = ? LIMIT 1");
     $stmt->bind_param("s", $email);
     if ($result = $stmt->execute()) {
         $stmt->store_result();
@@ -367,7 +438,7 @@ function get_question_id_and_texts()
 {
     global $mysqli;
     $stmt = $mysqli->stmt_init();
-    $stmt->prepare("SELECT id, question FROM Quiz.Questions ORDER BY id ASC");
+    $stmt->prepare("SELECT id, question FROM Questions ORDER BY id ASC");
 
     if ($result = $stmt->execute()) {
         $stmt->store_result();
@@ -388,7 +459,7 @@ function get_question_data($id)
 {
     global $mysqli;
     $stmt = $mysqli->stmt_init();
-    $stmt->prepare("SELECT email, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic FROM Quiz.Questions WHERE id = ?");
+    $stmt->prepare("SELECT email, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic FROM Questions WHERE id = ?");
     $stmt->bind_param("i", $id);
 
     if ($result = $stmt->execute()) {
@@ -410,13 +481,53 @@ function get_question_data($id)
     return null;
 }
 
+function user_responded_correctly($qid, $nick)
+{
+    global $mysqli;
+    $stmt = $mysqli->stmt_init();
+    // Sartu erabiltzailea bakarrik dagoeneko ez baldin badago taulan
+    // Honetarako `nick` zutabea UNIQUE izan behar du.
+    $stmt->prepare("INSERT IGNORE INTO Nicks (nick) VALUES (?)");
+    $stmt->bind_param("s", $nick);
+    $stmt->execute();
+
+    $stmt = $mysqli->stmt_init();
+    // Lortu erabiltzailearen ID-a
+    $stmt->prepare("SELECT id FROM Nicks WHERE nick = ?");
+    $stmt->bind_param("s", $nick);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($nid);
+    $stmt->fetch();
+
+    $stmt = $mysqli->stmt_init();
+    // Sartu zuzen erantzun duela
+    $stmt->prepare("INSERT IGNORE INTO Nicks2Questions (nid, qid) VALUES (?, ?)");
+    $stmt->bind_param("ii", $nid, $qid);
+    $stmt->execute();
+}
+
+function get_top_users()
+{
+    global $mysqli;
+    $stmt = $mysqli->stmt_init();
+    $stmt->prepare("SELECT nick, COUNT(qid) AS points FROM Nicks2Questions JOIN Nicks ON Nicks2Questions.nid = Nicks.id GROUP BY (nid) ORDER BY points DESC LIMIT 10");
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($nick, $points);
+    $result = array();
+    while ($stmt->fetch()) {
+        $result[] = array("nick" => $nick, "points" => $points);
+    }
+    return $result;
+}
 
 function update_question($id, $email, $galdera, $erantzun_zuzena, $erantzun_okerra1, $erantzun_okerra2, $erantzun_okerra3, $zailtasuna, $gaia)
 {
     global $mysqli;
 
     $stmt = $mysqli->stmt_init();
-    $stmt->prepare("UPDATE Quiz.Questions SET email=?, question=?, correct_answer=?, wrong_answer1=?, wrong_answer2=?, wrong_answer3=?, difficulty=?, topic=? WHERE id=?");
+    $stmt->prepare("UPDATE Questions SET email=?, question=?, correct_answer=?, wrong_answer1=?, wrong_answer2=?, wrong_answer3=?, difficulty=?, topic=? WHERE id=?");
 
     $stmt->bind_param("ssssssisi", $email, $galdera, $erantzun_zuzena, $erantzun_okerra1, $erantzun_okerra2, $erantzun_okerra3, $zailtasuna, $gaia, $id);
 

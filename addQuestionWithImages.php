@@ -45,7 +45,7 @@ if (isset($_POST['email']) && isset($_POST['galdera']) && isset($_POST['erantzun
     require_once "db.php";
 
     $stmt = $mysqli->stmt_init();
-    $stmt->prepare("INSERT INTO Quiz.Questions (email, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->prepare("INSERT INTO Questions (email, question, correct_answer, wrong_answer1, wrong_answer2, wrong_answer3, difficulty, topic, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $argazki = get_default_quiz_image();
     if (strlen($_FILES["file"]["name"]) > 0) {
